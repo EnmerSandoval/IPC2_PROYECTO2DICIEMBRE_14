@@ -1,3 +1,5 @@
+import requests
+
 class Nodo:
     def __init__(self, dato):
         self.dato = dato
@@ -41,7 +43,6 @@ class ListaDoble:
             nuevoNodo.anterior = self.end
             self.end = nuevoNodo
     
-
     def imprimir_lista_productos(self):
         print("*** Imprimiendo lista ***")
         # Caso de estar vacia
@@ -134,11 +135,104 @@ class ListaDoble:
         # Si ya buscamos toda la lista y no lo encontramos
         return None
     
-    def get_datos(self):
-        # Caso de estar vacia
-        if self.head is None:
-            return None
-        nodoTemporal = self.head
-        return nodoTemporal.dato
+    def eliminar_cliente(self, datos):
+
+        try:
+            nit = datos["nit"]
+            
+            # Caso de estar vacia
+            if self.head is None:
+                return
+
+            # Caso de que el valor esté en el nodo cabeza
+            if self.head.dato.nit == nit:
+                self.head = self.head.siguiente
+                self.head.anterior = None
+                return
+
+            # caso de que el valor este al final de la lista
+            if self.end.dato.nit == nit:
+                self.end = self.end.anterior
+                self.end.siguiente = None
+
+            # Caso de que el valor esté en algún otro nodo
+            nodo_temporal = self.head
+            while nodo_temporal is not None:
+                if nodo_temporal.dato.nit == nit:
+                    nodo_temporal.anterior.siguiente = nodo_temporal.siguiente
+                    nodo_temporal.siguiente.anterior = nodo_temporal.anterior
+                    return
+                nodo_temporal = nodo_temporal.siguiente
+            
+            return 200
+        except ValueError:
+            requests.error('Unable to parse JSON data from request.')
+            return 400
     
-    
+    def eliminar_producto(self, datos):
+
+        try:
+            codigo = datos["codigo"]
+            
+            # Caso de estar vacia
+            if self.head is None:
+                return
+
+            # Caso de que el valor esté en el nodo cabeza
+            if self.head.dato.codigo == codigo:
+                self.head = self.head.siguiente
+                self.head.anterior = None
+                return
+
+            # caso de que el valor este al final de la lista
+            if self.end.dato.codigo == codigo:
+                self.end = self.end.anterior
+                self.end.siguiente = None
+
+            # Caso de que el valor esté en algún otro nodo
+            nodo_temporal = self.head
+            while nodo_temporal is not None:
+                if nodo_temporal.dato.codigo == codigo:
+                    nodo_temporal.anterior.siguiente = nodo_temporal.siguiente
+                    nodo_temporal.siguiente.anterior = nodo_temporal.anterior
+                    return
+                nodo_temporal = nodo_temporal.siguiente
+
+            return 200
+        except ValueError:
+            requests.error('Unable to parse JSON data from request.')
+            return 400
+
+    def eliminar_factura(self, datos):
+        
+        try:
+            numero_f = datos["numero_f"]
+            
+            # Caso de estar vacia
+            if self.head is None:
+                return
+
+            # Caso de que el valor esté en el nodo cabeza
+            if self.head.dato.numero_factura == numero_f:
+                self.head = self.head.siguiente
+                self.head.anterior = None
+                return
+
+            # caso de que el valor este al final de la lista
+            if self.end.dato.numero_factura == numero_f:
+                self.end = self.end.anterior
+                self.end.siguiente = None
+
+            # Caso de que el valor esté en algún otro nodo
+            nodo_temporal = self.head
+            while nodo_temporal is not None:
+                if nodo_temporal.dato.numero_factura == numero_f:
+                    nodo_temporal.anterior.siguiente = nodo_temporal.siguiente
+                    nodo_temporal.siguiente.anterior = nodo_temporal.anterior
+                    return
+                nodo_temporal = nodo_temporal.siguiente
+
+            return 200
+        except ValueError:
+            requests.error('Unable to parse JSON data from request.')
+            return 400
