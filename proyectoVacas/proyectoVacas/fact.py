@@ -1,8 +1,7 @@
 import os
 class Facturas:
     correlativo = 1
-    def __init__(self, nombre_cliente, nit_cliente, fecha, detalle_compra,total):
-        self.nombre = nombre_cliente
+    def __init__(self, nit_cliente, fecha, detalle_compra,total):
         self.nit = nit_cliente
         self.fecha = fecha
         self.detalle = detalle_compra

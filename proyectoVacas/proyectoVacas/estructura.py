@@ -58,7 +58,6 @@ def obtencion_datos(ruta):
             el_cliente.facturas.agregar_nodo_final(int(numero_f))  # corregí aquí
 
     for factura in raiz.findall('facturas/factura'):
-        nombre_cliente = factura.find('nombre_cliente').text
         nit_cliente = factura.find('nit_cliente').text
         fecha = factura.find('fecha').text
         numero_f = factura.find('numero_factura').text
@@ -70,7 +69,7 @@ def obtencion_datos(ruta):
             cantidad = int(productos.find('cantidad').text)
             precio = float(productos.find('precio').text)
             detalle_factura.append((codigo, cantidad, precio))  # <-- Aquí está el cambio
-        la_factura = Facturas(nombre_cliente, nit_cliente, fecha, detalle_factura, total)
+        la_factura = Facturas(nit_cliente, fecha, detalle_factura, total)
         lista_facturas.agregar_nodo_final(la_factura)
 
     lista_productos.imprimir_lista_productos()
@@ -95,17 +94,24 @@ def crear_cliente(datos):
 def crear_factura(datos):
     try:
         nit = datos["nit"]
-        nombre_cliente = datos["nombre"]
-        detalle = datos["detalle'"]
+
         if lista_usuarios.get_cliente(nit) is None:
             print('no se encontro el nit del cliente, favor crearlo')
             return 400
         cliente_exsistente = lista_usuarios.get_cliente(nit)
         fecha_actual = datetime.now()
         fecha_actual_str = fecha_actual.strftime("%Y-%m-%d")
-        factura_nueva = Facturas(nombre_cliente, nit, fecha_actual_str, detalle)
+        detalle_factura = []
+        nodo_temporal = lista_productos.head
+        while nodo_temporal is not None:
+            codigo = nodo_temporal.dato.codigo
+            precio = nodo_temporal.dato.precio
+            cantidad = nodo_temporal.dato.stock
+            detalle_factura.append((codigo,precio,cantidad))
+            nodo_temporal = nodo_temporal.siguiente
+        factura_nueva = Facturas(nit, fecha_actual_str, detalle_factura)
         total_factura = 0
-        for producto in detalle:
+        for producto in detalle_factura:
             total_factura += float(producto[1]) * float(producto[2])
         print(total_factura)
         factura_nueva.total = total_factura
@@ -221,10 +227,7 @@ def generar_xml():
         la_factura = lista_facturas.get_factura(nodo_temporal3.dato.numero_factura)
         print(la_factura.numero_factura)
         factura_guardar = ET.SubElement(facturas, 'factura')
-        ET.SubElement(factura_guardar, 'nombre_cliente').text = la_factura.nombre
         ET.SubElement(factura_guardar, 'nit_cliente').text = la_factura.nit
-        #fecha_actual = datetime.now()
-        #fecha_actual_str = fecha_actual.strftime("%Y-%m-%d")
         ET.SubElement(factura_guardar, 'fecha').text = la_factura.fecha
         ET.SubElement(factura_guardar, 'numero_factura').text = str(la_factura.numero_factura)
         ET.SubElement(factura_guardar, 'total').text = str(la_factura.total)
@@ -236,17 +239,17 @@ def generar_xml():
         nodo_temporal3 = nodo_temporal3.siguiente
 
     arbol = ET.ElementTree(base_datos)
-    arbol.write('salida_prueba.xml')
+    arbol.write('reporte.xml')
 
 def crear_archivo():
-    if os.path.exists('prueba.xml'):
+    if os.path.exists('reporte.xml'):
         print('El archivo ya existe, porfavor cargar el archivo a la base de datos')
     else:
         try:
-            with open('prueba.xml', 'x') as archivo:
+            with open('reporte.xml', 'x') as archivo:
                 print('Archivo creado')
         except FileExistsError:
             print('El archivo ya existe, porfavor cargar el archivo a la base de datos')
 
 def cargar():
-    obtencion_datos('archivo_prueba.xml')
+    obtencion_datos('reporte.xml')
