@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pagina Principal</title>
+    <link rel="stylesheet" type="text/css" href="../static/styleHome.css">
+</head>
+<body>
+    <header>
+        <style>
+            #intro-example {
+                height: 400px;
+            }
+    
+            @media (min-width: 992px) {
+                #intro-example {
+                    height: 600px;
+                }
+            }
+        </style>
+        <div id="intro-example" class="p-5 text-center bg-image"
+            style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAEfyAZ_A3_tAOsKtWr13_9z_3rEP_khTeXQ&usqp=CAU');">
+           <br><br><br><br>
+            <div class="mask" style="background-color: rgba(255, 255, 255, 0.7);">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <div class="text-white">
+                        <h1 class="mb-3">Bienvenido</h1>
+                        <h5 class="mb-4">Manejo de Inventario</h5>
+                        <a class="btn btn-outline-light btn-lg m-2" id="registroBiblioteca" role="button"
+                            rel="nofollow" href="/clientes">Clientes</a>
+                        <a class="btn btn-outline-light btn-lg m-2" href="/productos">Productos</a>
+                        <a class="btn btn-outline-light btn-lg m-2" href="/facturas">Facturas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
