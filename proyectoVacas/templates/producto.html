@@ -114,14 +114,11 @@
             crearProducto.classList.add('active');
         }
 
-        function cerrarModal() {
-            var crearProducto = document.getElementById('createCategory');
-            crearProducto.classList.remove('active');
-        }
 
         function crearProducto() {
             // Lógica para crear un nuevo producto
             var tableBody = document.getElementById('tabla-productos').getElementsByTagName('tbody')[0];
+            var newRow = tableBody.insertRow(tableBody.rows.length);
             var numCells = 7;
 
             var codigo = document.getElementById('codigo-producto').value;
@@ -143,6 +140,7 @@
                 } else if (i === 5) {
                     button.innerText = 'Editar';
                     cell.appendChild(button);
+                    button.className = 'btn btn-primary';
                 } else if(i == 0){
                     text.innerText = codigo;
                     cell.appendChild(text);
