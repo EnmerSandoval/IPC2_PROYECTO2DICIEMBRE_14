@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from proyectoVacas.views import home, clientes, productos, facturas
-from .views import crearcliente
+from .views import crearcliente, editarcliente
 from .views import crearproducto
 from .views import crearfactura
 from .views import obtencionDatos
@@ -32,4 +32,5 @@ urlpatterns = [
     path('crearProducto/', crearproducto, name='crearproducto'),
     path('crearFactura/', crearfactura, name='crearfactura'),
     path('obtencionDatos/', obtencionDatos, name='obtencionDatos'),
+    path('editarCliente/', editarcliente, name='editarCliente'),
 ]
