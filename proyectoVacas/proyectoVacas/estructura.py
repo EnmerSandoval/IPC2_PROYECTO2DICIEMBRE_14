@@ -83,10 +83,14 @@ def obtencion_datos(ruta):
 
 def crear_cliente(data):
     try:
-        if lista_usuarios.get_cliente(nit_cliente) is not None:
+        datos = json.loads(data)
+        nombre = datos["nombre"]
+        nit = datos["nit"]
+        direccion = datos["direccion"]
+        if lista_usuarios.get_cliente(nit) is not None:
             print('cliente ya creado, error')
             return
-        cliente_nuevo = cliente(nombre_cliente, nit_cliente, direccion_cliente)
+        cliente_nuevo = cliente(nombre, nit, direccion)
         lista_usuarios.agregar_nodo_final(cliente_nuevo)
         print('agrego cliente')
         print(data)
