@@ -20,6 +20,40 @@ def crearcliente(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
 
+@csrf_exempt
+def crearfactura(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            result = crear_factura(data)
+
+            return JsonResponse({'status': 'success', 'result': result})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        
+@csrf_exempt        
+def crearproducto(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            result = crear_producto(data)
+
+            return JsonResponse({'status': 'success', 'result': result})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+@csrf_exempt
+def obtencionDatos(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            result = obtencion_datos(data)
+
+            return JsonResponse({'status': 'success', 'result': result})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
 def home(request):
     return render(request, 'home.html')
 

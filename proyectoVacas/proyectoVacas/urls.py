@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from proyectoVacas.views import home, clientes, productos, facturas
 from .views import crearcliente
+from .views import crearproducto
+from .views import crearfactura
+from .views import obtencionDatos
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +29,7 @@ urlpatterns = [
     path('productos/', productos),
     path('facturas', facturas),
     path('crearCliente/', crearcliente, name='crearcliente'),
+    path('crearProducto/', crearproducto, name='crearproducto'),
+    path('crearFactura/', crearfactura, name='crearfactura'),
+    path('obtencionDatos/', obtencionDatos, name='obtencionDatos'),
 ]
