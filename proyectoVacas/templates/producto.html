@@ -1,35 +1,13 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Productos</title>
-    <link rel="stylesheet" href="ruta/a/bootstrap.min.css">
-    <script src="ruta/a/popper.min.js"></script>
-    <script src="ruta/a/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../static/productos.css">
+    <link rel="stylesheet" href="../static/reset.css">
 </head>
+
 <body>
-    <div>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#createCategory">+ Crear nuevo Producto</button>
-        <br><br>
-        <table class="table">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">CODIGO</th>
-                    <th scope="col">NOMBRE</th>
-                    <th scope="col">DESCRIPCION</th>
-                    <th scope="col">PRECIO</th>
-                    <th scope="col">STOCK</th> 
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="categoryTableBody">
-                <!--Codigo para llenar la tabla de los productos-->
-                <!--Al final en la ultima columna hay un boton para eliminar -->
-            </tbody>
-        </table>
-    </div>
-    
     <div id="createCategory" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -62,11 +40,33 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Crear</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="crearProducto()">Crear</button>
                 </div>
             </div>
         </div>
     </div>
+    <div>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#createCategory" onclick="showCrearProducto()">Crear nuevo Producto</button>
+        <br><br>
+        <table class="table" id="tabla-productos">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">CODIGO</th>
+                    <th scope="col">NOMBRE</th>
+                    <th scope="col">DESCRIPCION</th>
+                    <th scope="col">PRECIO</th>
+                    <th scope="col">STOCK</th> 
+                    <th colspan="2">ACCIONEs</th>
+                </tr>
+            </thead>
+            <tbody id="categoryTableBody">
+                <!--Codigo para llenar la tabla de los productos-->
+                <!--Al final en la ultima columna hay un boton para eliminar -->
+            </tbody>
+        </table>
+    </div>
+    
+    
     
     <div id="editCategory" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -78,23 +78,23 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="codigo-producto">Codigo:</label>
+                            <label for="codigo-producto-edit">Codigo:</label>
                             <input type="text" class="form-control" id="codigo-producto" name="codigo-producto" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="nombre-producto">Nombre del producto:</label>
+                            <label for="nombre-producto-edit">Nombre del producto:</label>
                             <input type="text" class="form-control" id="nombre-producto" name="nombre-producto">
                         </div>
                         <div class="form-group">
-                            <label for="descripcion-producto">Descripcion del producto:</label>
+                            <label for="descripcion-producto-edit">Descripcion del producto:</label>
                             <input type="text" class="form-control" id="descripcion-producto" name="descripcion-producto">
                         </div>
                         <div class="form-group">
-                            <label for="precio-producto">Precio:</label>
+                            <label for="precio-producto-edit">Precio:</label>
                             <input type="number" class="form-control" id="precio-producto" name="precio-producto">
                         </div>
                         <div class="form-group">
-                            <label for="stock-producto">Stock:</label>
+                            <label for="stock-producto-edit">Stock:</label>
                             <input type="number" class="form-control" id="stock-producto" name="stock-producto">
                         </div>
                     </form>
@@ -108,6 +108,88 @@
 
     <!-- JavaScript para llenar la tabla y mostrar/ocultar modales -->
     <script>
+
+        function showCrearProducto() {
+            var crearProducto = document.getElementById('createCategory');
+            crearProducto.classList.add('active');
+        }
+
+        function cerrarModal() {
+            var crearProducto = document.getElementById('createCategory');
+            crearProducto.classList.remove('active');
+        }
+
+        function crearProducto() {
+            // Lógica para crear un nuevo producto
+            var tableBody = document.getElementById('tabla-productos').getElementsByTagName('tbody')[0];
+            var numCells = 7;
+
+            var codigo = document.getElementById('codigo-producto').value;
+            var nombre = document.getElementById('nombre-producto').value;
+            var descripcion = document.getElementById('descripcion-producto').value;
+            var precio = document.getElementById('precio-producto').value;
+            var stock = document.getElementById('stock-producto').value;
+
+            for (var i=0; i < numCells; i++) {
+                var cell = newRow.insertCell(i);
+                var text = document.createElement('p');
+                var button = document.createElement('button');
+
+                // Set the appropriate input type based on cell index
+                if (i === 6) {
+                    button.innerText = 'Eliminar';
+                    cell.appendChild(button);
+                    button.className = 'btn btn-danger';
+                } else if (i === 5) {
+                    button.innerText = 'Editar';
+                    cell.appendChild(button);
+                } else if(i == 0){
+                    text.innerText = codigo;
+                    cell.appendChild(text);
+                } else if(i == 1){
+                    text.innerText = nombre;
+                    cell.appendChild(text);
+                } else if(i == 2){
+                    text.innerText = descripcion;
+                    cell.appendChild(text);
+                } else if(i == 3){
+                    text.innerText = precio;
+                    cell.appendChild(text);
+                } else if(i == 4){
+                    text.innerText = stock;
+                    cell.appendChild(text);
+                }
+            }
+        }
+
+        var post = {
+            codigo: codigo,
+            nombre: nombre,
+            descripcion: descripcion,
+            precio: precio,
+            stock: stock,
+        }
+
+        fetch('http://127.0.0.1:8000/crearProducto/', {
+            method: 'POST',
+            body: JSON.stringify(post),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(response => response.json())
+            .then(data => {
+            if (data.status === 'success') {
+                console.log('Result:', data.result);
+            } else {
+                console.error('Error:', data.message);
+            }
+            })
+            .catch(error => console.error('Fetch error:', error));
+            
+            var crearProducto = document.getElementById('createCategory');
+            crearCliente.style = 'display: none';
+
         function showModal() {
             // Lógica para mostrar el modal de creación
         }
