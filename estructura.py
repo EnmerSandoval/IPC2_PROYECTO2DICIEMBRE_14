@@ -4,6 +4,7 @@ import lista_doble_enlazada
 import producto
 import usuario
 import fact
+from datetime import datetime
 from usuario import cliente
 
 lista_usuarios = lista_doble_enlazada.ListaDoble()
@@ -70,7 +71,7 @@ def obtencion_datos(ruta):
             cantidad = int(productos.find('cantidad').text)
             precio = float(productos.find('precio').text)
             detalle_factura.append((codigo, cantidad, precio))  # <-- Aquí está el cambio
-        la_factura = fact.Facturas(nombre_cliente, nit_cliente, fecha, detalle_factura,total)
+        la_factura = fact.Facturas(nombre_cliente, nit_cliente, fecha, detalle_factura, total)
         lista_facturas.agregar_nodo_final(la_factura)
 
     lista_productos.imprimir_lista_productos()
@@ -79,16 +80,30 @@ def obtencion_datos(ruta):
 
 
 def crear_cliente(nombre_cliente, nit_cliente, direccion_cliente):
+    if lista_usuarios.get_cliente(nit_cliente) is not None:
+        print('cliente ya creado, error')
+        return
     cliente_nuevo = usuario.cliente(nombre_cliente, nit_cliente, direccion_cliente)
     lista_usuarios.agregar_nodo_final(cliente_nuevo)
     print('agrego cliente')
 
 
-def crear_factura(nit_cliente, nombre_cliente, detalle_factura, fecha):
-    if lista_usuarios.get(nit_cliente) is None:
+def crear_factura(nit_cliente, nombre_cliente, detalle_factura):
+    if lista_usuarios.get_cliente(nit_cliente) is None:
         print('no se encontro el nit del cliente, favor crearlo')
         return
-    cliente_exsistente = lista_usuarios.get(nit_cliente)
-    factura_nueva = fact.Facturas(nombre_cliente, nit_cliente, fecha, detalle_factura)
-    cliente_exsistente.Facturas.agregar_nodo_final(factura_nueva)
+    cliente_exsistente = lista_usuarios.get_cliente(nit_cliente)
+    fecha_actual = datetime.now()
+    fecha_actual_str = fecha_actual.strftime("%Y-%m-%d")
+    factura_nueva = fact.Facturas(nombre_cliente, nit_cliente, fecha_actual_str, detalle_factura)
+    numero_f = int(factura_nueva.numero_factura)
+    cliente_exsistente.facturas.agregar_nodo_final(numero_f)
     lista_facturas.agregar_nodo_final(factura_nueva)
+
+
+def crear_producto(nombre, descripcion, precio, stock, codigo):
+    if lista_productos.get_producto(codigo) is not None:
+        print('producto ya creado, error')
+        return
+    producto_nuevo = producto.productos(nombre, descripcion, precio, stock, codigo)
+    lista_productos.agregar_nodo_final(producto_nuevo)
