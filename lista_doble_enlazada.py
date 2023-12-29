@@ -83,6 +83,7 @@ class ListaDoble:
             return
         nodo_temporal = self.head
         while nodo_temporal is not None:
+            print(f"Numero factura: {nodo_temporal.dato.numero_factura}")
             print(f"Nombre: {nodo_temporal.dato.nombre}")
             print(f"Nit: {nodo_temporal.dato.nit}")
             print(f"Fecha: {nodo_temporal.dato.fecha}")
@@ -119,7 +120,19 @@ class ListaDoble:
             nodoTemporal = nodoTemporal.siguiente
         # Si ya buscamos toda la lista y no lo encontramos
         return None
-    
+
+    def get_factura(self, numero_f):
+        # Caso de estar vacia
+        if self.head is None:
+            return None
+        nodoTemporal = self.head
+        while nodoTemporal is not None:
+            # Si el dato actual es el que buscamos
+            if nodoTemporal.dato.numero_factura == numero_f:
+                return nodoTemporal.dato
+            nodoTemporal = nodoTemporal.siguiente
+        # Si ya buscamos toda la lista y no lo encontramos
+        return None
     
     def get_datos(self):
         # Caso de estar vacia

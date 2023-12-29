@@ -30,9 +30,9 @@ def obtencion_datos(ruta):
     for datos in raiz.findall('productos/producto'):
         nombre_producto = datos.find('nombre').text
         descripcion_producto = datos.find('descripcion').text
-        precio_producto = datos.find('precio').text
-        stock_producto = datos.find('stock').text
-        codigo_producto = datos.find('codigo').text
+        precio_producto = float(datos.find('precio').text)
+        stock_producto = int(datos.find('stock').text)
+        codigo_producto = int(datos.find('codigo').text)
         print(nombre_producto)
 
         if lista_productos.get_producto(codigo_producto) is None:
@@ -44,7 +44,7 @@ def obtencion_datos(ruta):
 
     for cliente in raiz.findall('clientes/cliente'):
         nombre_cliente = cliente.find('nombre').text
-        nit_cliente = cliente.find('nit').text
+        nit_cliente = int(cliente.find('nit').text)
         direccion_cliente = cliente.find('direccion').text
         if lista_usuarios.get_cliente(nit_cliente) is None:
             print('valido none para crear cliente')
