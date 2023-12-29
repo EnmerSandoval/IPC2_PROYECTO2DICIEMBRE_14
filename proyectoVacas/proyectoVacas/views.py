@@ -21,6 +21,22 @@ def crearcliente(request):
         return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
 
 @csrf_exempt
+def editarcliente(request):
+    if request.method == 'POST':
+        try:
+            # Get the data from the request body
+            data = json.loads(request.body.decode('utf-8'))
+
+            # Process the data using your Python script
+            result = editar_cliente(data)
+
+            return JsonResponse({'status': 'success', 'result': result})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
+
+@csrf_exempt
 def crearfactura(request):
     if request.method == 'POST':
         try:
